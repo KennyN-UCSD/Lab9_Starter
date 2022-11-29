@@ -104,63 +104,96 @@
     // You may move this JS to another file if you wish
     const logButton = document.querySelector("#log-button");
     logButton.addEventListener("click", (event) => {
-      
+      console.log("Console Log Demo");
     });
+
     const errorButton = document.querySelector("#error-button");
     errorButton.addEventListener("click", (event) => {
-
+      console.error("Console Error Demo");
     });
+
     const countButton = document.querySelector("#count-button");
     countButton.addEventListener("click", (event) => {
-
+      console.count("Counter");
     });
+
     const warnButton = document.querySelector("#warn-button");
     warnButton.addEventListener("click", (event) => {
-
+      console.warn("Console Warn Demo");
     });
+
     const assertButton = document.querySelector("#assert-button");
     assertButton.addEventListener("click", (event) => {
-
+      const x = 3;
+      const reason = "default count is expected to be less than x";
+      console.assert(Counter < x, {Counter, x, reason});
     });
+
     const clearButton = document.querySelector("#clear-button");
     clearButton.addEventListener("click", (event) => {
-
+      console.clear();  
     });
+
     const dirButton = document.querySelector("#dir-button");
     dirButton.addEventListener("click", (event) => {
-
+      console.dir(document.querySelector(errorBtns));
     });
     const dirxmlButton = document.querySelector("#dirxml-button");
     dirxmlButton.addEventListener("click", (event) => {
-
+      console.dirxml(document.querySelector(errorBtns));
     });
+
+    const groupName = "Recent Outputs";
     const groupStartButton = document.querySelector("#group-start-button");
     groupStartButton.addEventListener("click", (event) => {
-
+      console.group(groupName);
     });
     const groupEndButton = document.querySelector("#group-end-button");
     groupEndButton.addEventListener("click", (event) => {
-
+      console.groupEnd(groupName);
     });
+
     const tableButton = document.querySelector("#table-button");
     tableButton.addEventListener("click", (event) => {
-
+      var restaurants = [
+        {
+          name: "In-n-Out",
+          rating: "5/5",
+        },
+        {
+          name: "McDonalds",
+          rating: "3/5",
+        },
+        {
+          name: "Wendy's",
+          rating: "4/5",
+        }
+      ];
+      console.table(restaurants);
     });
+
+    const timerName = "Timer";
     const startTimerButton = document.querySelector("#start-timer-button");
     startTimerButton.addEventListener("click", (event) => {
-
+      console.time(timerName);
     });
     const endTimerButton = document.querySelector("#end-timer-button");
     endTimerButton.addEventListener("click", (event) => {
-
+      console.timeEnd(timerName);
     });
+
     const traceButton = document.querySelector("#trace-button");
     traceButton.addEventListener("click", (event) => {
-
+      const firstLayer = () => { secondLayer(); };
+      const secondLayer = () => { thirdLayer(); };
+      const thirdLayer = () => { finalLayer(); };
+      const finalLayer = () => { console.trace(); };
+      firstLayer();
     });
+
     const globalErrorButton = document.querySelector("#global-error-button");
     globalErrorButton.addEventListener("click", (event) => {
-
+      undefinedFunction("This function is not defined.");
     });
   </script>
 </body>
