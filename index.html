@@ -87,6 +87,15 @@
     </section>
   </main>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+  <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "add5032df64843799c60882b02b38773"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+                        
+
   <script>
     let form = document.querySelector('form');
     form.addEventListener('submit', e => {
@@ -122,11 +131,59 @@
       console.warn("Console Warn Demo");
     });
 
+    class InvalidInputError extends Error {
+      constructor(message) {
+        super(message);
+        this.name = "InvalidInputError";
+      }
+    }
+
+    class InvalidInputTypeError extends InvalidInputError {
+      constructor(type) {
+        super("Invalid type: " + type);
+        this.name = "InvalidInputTypeError";
+        this.invtype = type;
+      }
+    }
+
+    const x = 10;
+    var y = 999;
     const assertButton = document.querySelector("#assert-button");
     assertButton.addEventListener("click", (event) => {
-      const x = 3;
-      const reason = "default count is expected to be less than x";
-      console.assert(Counter < x, {Counter, x, reason});
+      try {
+        y = document.querySelector("output").innerHTML;
+        if (y === undefined) {
+          throw new InvalidInputTypeError("undefined");
+        }
+        if (y === null) {
+          throw new InvalidInputTypeError("null");
+        }
+        if (y === null) {
+          throw new InvalidInputTypeError("string");
+        }
+        if (y === null) {
+          throw new InvalidInputTypeError("symbol");
+        }
+        if (y == 0) {
+          throw new InvalidInputError(0);
+        }
+      } catch (err) {
+        if (err instanceof InvalidInputTypeError) {
+          console.error("Invalid output type: " + err.message);
+          console.error(err.name);
+          console.error(err.invtype);
+          y = 999;
+        }
+        else if (err instanceof InvalidInputError) {
+          console.error("Invalid output: " + err.message);
+          console.error(err.name);
+        }
+      } finally {
+        const reason = "x is expected to be a valid number less than y";
+        console.assert(x > y, {x, y, reason});
+        const reason2 = "y is expected to be non-zero";
+        console.assert(y > 0, {y, reason2});
+      }
     });
 
     const clearButton = document.querySelector("#clear-button");
@@ -136,11 +193,11 @@
 
     const dirButton = document.querySelector("#dir-button");
     dirButton.addEventListener("click", (event) => {
-      console.dir(document.querySelector(errorBtns));
+      console.dir(document.querySelector("#error-btns"));
     });
     const dirxmlButton = document.querySelector("#dirxml-button");
     dirxmlButton.addEventListener("click", (event) => {
-      console.dirxml(document.querySelector(errorBtns));
+      console.dirxml(document.querySelector("#error-btns"));
     });
 
     const groupName = "Recent Outputs";
@@ -193,7 +250,11 @@
 
     const globalErrorButton = document.querySelector("#global-error-button");
     globalErrorButton.addEventListener("click", (event) => {
-      undefinedFunction("This function is not defined.");
+      try {
+        undefinedFunction("This function is not defined.");
+      } catch (err) {
+        TrackJS.track("Undefined function in globalErrorButton");
+      }
     });
   </script>
 </body>
